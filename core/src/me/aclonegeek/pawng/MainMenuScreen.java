@@ -1,6 +1,5 @@
 package me.aclonegeek.pawng;
 
-import me.aclonegeek.pawng.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
