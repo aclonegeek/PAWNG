@@ -6,4 +6,7 @@ package me.aclonegeek.pawng;
 public class Constants {
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
+
+    public static final int PADDLE_SPEED = 300;
+    public static final int BALL_SPEED = 500;
 }
