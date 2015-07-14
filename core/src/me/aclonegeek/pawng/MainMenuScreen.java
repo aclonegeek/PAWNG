@@ -34,12 +34,12 @@ public class MainMenuScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        game.font.draw(game.batch, "PAWNG", Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2);
-        game.font.draw(game.batch, "Click anywhere to play", 640, 300);
+            game.font.draw(game.batch, "PAWNG", Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2);
+            game.font.draw(game.batch, "Click anywhere to play", 640, 300);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
-            game.setScreen(new GameScreen(this));
+            game.setScreen(new GameScreen(game));
             dispose();
         }
     }
