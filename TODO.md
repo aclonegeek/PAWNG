@@ -1,0 +1,11 @@
+- make a nice todo list
+- make a nice main menu
+- make a nice game screen / gui
+--- > scores
+- implement states and state handling (if possible)
+- implement paddle2 logic
+- implement ball logic
+- implement audio (hit effect)
+- maybe remove the use of textures, or utilize them and make nice textures
+- add comments
+- remove translate method?
