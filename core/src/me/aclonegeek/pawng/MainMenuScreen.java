@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
  * Created by RandyT on 7/13/2015.
  */
 public class MainMenuScreen implements Screen {
-    final PAWNG game;
+    private final PAWNG game;
 
     OrthographicCamera camera;
 
@@ -17,7 +17,7 @@ public class MainMenuScreen implements Screen {
         this.game = game;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
@@ -34,7 +34,7 @@ public class MainMenuScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-            game.font.draw(game.batch, "PAWNG", Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2);
+            game.font.draw(game.batch, "PAWNG", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
             game.font.draw(game.batch, "Click anywhere to play", 640, 300);
         game.batch.end();
 
