@@ -13,23 +13,40 @@ import com.badlogic.gdx.math.Rectangle;
  * Created by RandyT on 7/13/2015.
  */
 public class GameScreen implements Screen {
-    final PAWNG game;
+    private final PAWNG game;
 
-    Texture paddleImage;
-    Texture ballImage;
+    private Ball ball = new Ball();
+    private Paddle paddle1 = new Paddle();
+    private Paddle paddle2 = new Paddle();
 
-    Rectangle paddle1;
-    Rectangle paddle2;
-    Rectangle ball;
+    private Rectangle field = new Rectangle();
 
-    Sound hit;
+    private float fieldTop;
+    private float fieldBottom;
+    private float fieldLeft;
+    private float fieldRight;
 
-    OrthographicCamera camera;
+    private boolean moveDown = false;
+    private boolean moveUp = false;
+
+    private Texture paddleImage;
+    private Texture ballImage;
+
+    private Sound hit;
+
+    private OrthographicCamera camera;
 
     public GameScreen(final PAWNG game) {
         this.game = game;
 
+        field.set(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        fieldTop = field.y + field.height;
+        fieldBottom = field.y;
+        fieldLeft = field.x;
+        fieldRight = field.x + field.width;
+
         loadAssets();
+        reset();
     }
 
     private void loadAssets() {
@@ -39,33 +56,69 @@ public class GameScreen implements Screen {
         hit = Gdx.audio.newSound(Gdx.files.internal("audio/hit.wav"));
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-
-        paddle1 = new Rectangle(50, 360, 20, 100); // Left paddle (player paddle)
-        paddle2 = new Rectangle(1230, 360, 20, 100); // Right paddle
-
-        ball = new Rectangle(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2, 32, 32);
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    private void processEvents() {
-        // Move paddle up
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            paddle1.y += Constants.PADDLE_SPEED * Gdx.graphics.getDeltaTime();
-        }
+    private void reset() {
+        // Reset object locations
+        ball.move((Gdx.graphics.getWidth() / 2) - ball.getWidth(), (Gdx.graphics.getHeight() / 2) - ball.getHeight()); // Center ball
+        paddle1.move(field.x + (field.width * 0.1f), field.y + (field.height - paddle1.getHeight()) / 2);
+        paddle2.move(field.x + field.width - (field.width * 0.1f), field.y + (field.height - paddle2.getHeight()) / 2);
+    }
 
-        // Move paddle down
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            paddle1.y -= Constants.PADDLE_SPEED * Gdx.graphics.getDeltaTime();
-        }
-
-        // Return to main menu
-        if (Gdx.input.isKeyPressed(Input.Keys.P)) {
+    private void processEvents(float dt) {
+        // Menu Related
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MainMenuScreen(game));
         }
 
-        // Keep the player paddle in bounds
-        if (paddle1.y < 0) paddle1.y = 0;
-        if (paddle1.y > Constants.SCREEN_HEIGHT - 100) paddle1.y = Constants.SCREEN_HEIGHT - 100;
+        // Handle ball logic
+        ballLogic(dt);
+
+        // Handle paddle logic
+        paddle1Logic(dt);
+        //paddle2Logic(dt);
+    }
+
+    public void ballLogic(float dt) {
+
+    }
+
+    public void paddle1Logic(float dt) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            moveUp = true;
+            moveDown = false;
+        }
+
+        // Move paddle down
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            moveUp = false;
+            moveDown = true;
+        }
+
+        if(moveUp) {
+            paddle1.setVelocity(0f, paddle1.getSpeed());
+            moveUp = false;
+        } else if(moveDown) {
+            paddle1.setVelocity(0f, -paddle1.getSpeed());
+            moveDown = false;
+        } else {
+            paddle1.setVelocity(0f, 0f);
+        }
+
+        paddle1.integrate(dt);
+        paddle1.updateBounds();
+
+        // Collision logic
+        if(paddle1.top() > fieldTop) {
+            paddle1.move(paddle1.getX(), fieldTop - paddle1.getHeight());
+            paddle1.setVelocity(0f, 0f);
+        }
+
+        if(paddle1.bottom() < fieldBottom) {
+            paddle1.move(paddle1.getX(), fieldBottom);
+            paddle1.setVelocity(0f, 0f);
+        }
     }
 
     @Override
@@ -74,7 +127,15 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float dt) {
+        dt = Gdx.graphics.getRawDeltaTime();
+
+        //update(dt); - use this for states down the road (if i can get states working :()
+        draw(dt);
+        processEvents(dt);
+    }
+
+    private void draw(float dt) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -82,12 +143,10 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-            game.batch.draw(ballImage, ball.x, ball.y);
-            game.batch.draw(paddleImage, paddle1.x, paddle1.y);
-            game.batch.draw(paddleImage, paddle2.x, paddle2.y);
+            game.batch.draw(ballImage, ball.getX(), ball.getY());
+            game.batch.draw(paddleImage, paddle1.getX(), paddle1.getY());
+            game.batch.draw(paddleImage, paddle2.getX(), paddle2.getY());
         game.batch.end();
-
-        processEvents();
     }
 
     @Override
