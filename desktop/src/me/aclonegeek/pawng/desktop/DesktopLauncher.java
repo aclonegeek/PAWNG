@@ -10,7 +10,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 
-		cfg.title = "PAWNG" + VERSION;
+		cfg.title = "PAWNG " + VERSION;
 		cfg.width = 1280;
 		cfg.height = 720;
 
