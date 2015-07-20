@@ -6,6 +6,8 @@ package me.aclonegeek.pawng;
 public class Paddle extends GameObject {
     private static final float SPEED = 400f;
 
+    private float paddleCenterY = super.getY() + (super.getHeight() / 2);
+
     public Paddle() {
         super(20, 100);
     }
