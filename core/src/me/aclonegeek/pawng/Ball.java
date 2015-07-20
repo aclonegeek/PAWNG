@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Ball extends GameObject {
     private Vector2 velocity = getVelocity();
 
-    private static final float REFLECT_ANGLE = 75f;
+    private static final float REFLECT_ANGLE = 65f;
     private static final float SPEED = 350f;
     private static final float MAX_SPEED = 650f;
     private static final float SPEED_MODIFIER = 1.05f;
