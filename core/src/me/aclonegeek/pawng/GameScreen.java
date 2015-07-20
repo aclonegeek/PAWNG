@@ -160,7 +160,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float dt) {
-        dt = Gdx.graphics.getRawDeltaTime();
+        dt = Gdx.graphics.getDeltaTime();
 
         //update(dt); - use this for states down the road (if i can get states working :()
         draw(dt);
