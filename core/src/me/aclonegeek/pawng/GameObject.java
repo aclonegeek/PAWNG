@@ -75,6 +75,14 @@ public abstract class GameObject {
         return velocity;
     }
 
+    public float getVelocityX() {
+        return velocity.x;
+    }
+
+    public float getVelocityY() {
+        return velocity.y;
+    }
+
     public void setVelocity(float x, float y) {
         velocity.set(x, y);
     }
