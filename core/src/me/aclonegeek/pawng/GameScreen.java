@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by RandyT on 7/13/2015.
@@ -36,6 +37,8 @@ public class GameScreen implements Screen {
 
     private OrthographicCamera camera;
 
+    private Vector2 velocity;
+
     public GameScreen(final PAWNG game) {
         this.game = game;
 
@@ -61,7 +64,12 @@ public class GameScreen implements Screen {
 
     private void reset() {
         // Reset object locations
-        ball.move((Gdx.graphics.getWidth() / 2) - ball.getWidth(), (Gdx.graphics.getHeight() / 2) - ball.getHeight()); // Center ball
+        ball.move((Gdx.graphics.getWidth() / 2) - ball.getWidth(), (Gdx.graphics.getHeight() / 2) - ball.getHeight()); // Center ball\
+        velocity = ball.getVelocity();
+        velocity.set(ball.getSpeed(), 0f);
+        velocity.setAngle(45f);
+        ball.setVelocity(velocity.x, velocity.y);
+
         paddle1.move(field.x + (field.width * 0.1f), field.y + (field.height - paddle1.getHeight()) / 2);
         paddle2.move(field.x + field.width - (field.width * 0.1f), field.y + (field.height - paddle2.getHeight()) / 2);
     }
@@ -72,16 +80,40 @@ public class GameScreen implements Screen {
             game.setScreen(new MainMenuScreen(game));
         }
 
-        // Handle ball logic
-        ballLogic(dt);
+        // Reset game screen
+        if(Gdx.input.isKeyPressed(Input.Keys.R)) {
+            reset();
+        }
 
-        // Handle paddle logic
+        ballLogic(dt);
         paddle1Logic(dt);
         //paddle2Logic(dt);
     }
 
     public void ballLogic(float dt) {
+        ball.integrate(dt);
+        ball.updateBounds();
 
+        // Collision logic
+        if(ball.top() > fieldTop) {
+            ball.move(ball.getX(), fieldTop - ball.getHeight());
+            ball.reflect(false, true);
+        }
+
+        if(ball.bottom() < fieldBottom) {
+            ball.move(ball.getX(), fieldBottom);
+            ball.reflect(false, true);
+        }
+
+        if(ball.left() < fieldLeft) {
+            ball.move(fieldLeft, ball.getY());
+            ball.reflect(true, false);
+        }
+
+        if(ball.right() > fieldRight) {
+            ball.move(fieldRight - ball.getHeight(), ball.getY());
+            ball.reflect(true, false);
+        }
     }
 
     public void paddle1Logic(float dt) {
