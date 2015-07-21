@@ -27,6 +27,12 @@ public class GameScreen implements Screen {
     private float fieldLeft;
     private float fieldRight;
 
+    private float ballCenterY;
+    private float paddleCenterY;
+    private float difference;
+    private float position;
+    private float angle;
+
     private boolean moveDown = false;
     private boolean moveUp = false;
 
@@ -113,6 +119,37 @@ public class GameScreen implements Screen {
         if(ball.right() > fieldRight) {
             ball.move(fieldRight - ball.getHeight(), ball.getY());
             ball.reflect(true, false);
+        }
+
+        // Ball-paddle collision logic
+        if(ball.getBounds().overlaps(paddle1.getBounds())) {
+            if(ball.left() < paddle1.right() && ball.right() > paddle1.right()) {
+                ball.move(paddle1.right(), ball.getY());
+                ball.reflect(true, false);
+
+                ballCenterY = ball.getY() + (ball.getHeight() / 2);
+                paddleCenterY = paddle1.getY() + (paddle1.getHeight() / 2);
+                difference = ballCenterY - paddleCenterY;
+                position = difference / paddle1.getHeight();
+                angle = ball.getReflectAngle() * position;
+
+                velocity.setAngle(angle);
+                ball.setVelocity(velocity.x, velocity.y);
+            }
+        } else if(ball.getBounds().overlaps(paddle2.getBounds())) {
+            if(ball.right() > paddle2.left() && ball.left() < paddle2.left()) {
+                ball.move(paddle2.left() - ball.getWidth(), ball.getY());
+                ball.reflect(true, false);
+
+                ballCenterY = ball.getY() + (ball.getHeight() / 2);
+                paddleCenterY = paddle1.getY() + (paddle1.getHeight() / 2);
+                difference = ballCenterY - paddleCenterY;
+                position = difference / paddle1.getHeight();
+                angle = ball.getReflectAngle() * position;
+
+                velocity.setAngle(180f - angle);
+                ball.setVelocity(velocity.x, velocity.y);
+            }
         }
     }
 
