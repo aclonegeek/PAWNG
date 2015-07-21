@@ -33,8 +33,10 @@ public class GameScreen implements Screen {
     private float position;
     private float angle;
 
-    private boolean moveDown = false;
-    private boolean moveUp = false;
+    private boolean paddle1MoveDown = false;
+    private boolean paddle1MoveUp = false;
+    private boolean paddle2MoveDown = false;
+    private boolean paddle2MoveUp = false;
 
     private Texture paddleImage;
     private Texture ballImage;
@@ -81,6 +83,14 @@ public class GameScreen implements Screen {
     }
 
     private void processEvents(float dt) {
+        handleInput();
+
+        ballLogic(dt);
+        paddle1Logic(dt);
+        paddle2Logic(dt);
+    }
+
+    private void handleInput() {
         // Menu Related
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MainMenuScreen(game));
@@ -91,9 +101,31 @@ public class GameScreen implements Screen {
             reset();
         }
 
-        ballLogic(dt);
-        paddle1Logic(dt);
-        paddle2Logic(dt);
+        // Paddle1 input
+        // Move paddle up
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            paddle1MoveUp = true;
+            paddle1MoveDown = false;
+        }
+
+        // Move paddle down
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            paddle1MoveUp = false;
+            paddle1MoveDown = true;
+        }
+
+        // Paddle 2 input
+        // Move paddle up
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            paddle2MoveUp = true;
+            paddle2MoveDown = false;
+        }
+
+        // Move paddle down
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            paddle2MoveUp = false;
+            paddle2MoveDown = true;
+        }
     }
 
     public void ballLogic(float dt) {
@@ -154,23 +186,12 @@ public class GameScreen implements Screen {
     }
 
     public void paddle1Logic(float dt) {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            moveUp = true;
-            moveDown = false;
-        }
-
-        // Move paddle down
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            moveUp = false;
-            moveDown = true;
-        }
-
-        if(moveUp) {
+        if(paddle1MoveUp) {
             paddle1.setVelocity(0f, paddle1.getSpeed());
-            moveUp = false;
-        } else if(moveDown) {
+            paddle1MoveUp = false;
+        } else if(paddle1MoveDown) {
             paddle1.setVelocity(0f, -paddle1.getSpeed());
-            moveDown = false;
+            paddle1MoveDown = false;
         } else {
             paddle1.setVelocity(0f, 0f);
         }
@@ -191,23 +212,12 @@ public class GameScreen implements Screen {
     }
 
     private void paddle2Logic(float dt) {
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            moveUp = true;
-            moveDown = false;
-        }
-
-        // Move paddle down
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            moveUp = false;
-            moveDown = true;
-        }
-
-        if(moveUp) {
+        if(paddle2MoveUp) {
             paddle2.setVelocity(0f, paddle2.getSpeed());
-            moveUp = false;
-        } else if(moveDown) {
+            paddle2MoveUp = false;
+        } else if(paddle2MoveDown) {
             paddle2.setVelocity(0f, -paddle2.getSpeed());
-            moveDown = false;
+            paddle2MoveDown = false;
         } else {
             paddle2.setVelocity(0f, 0f);
         }
