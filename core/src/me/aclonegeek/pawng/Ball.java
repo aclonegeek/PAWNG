@@ -13,7 +13,7 @@ public class Ball extends GameObject {
     private static final float MAX_SPEED = 650f;
     private static final float SPEED_MODIFIER = 1.05f;
 
-    private float ballCenterY = super.getY() + (super.getHeight() / 2);
+    public float ballCenterY = super.getY() + (super.getHeight() / 2);
 
     public Ball() {
         super(32, 32);
