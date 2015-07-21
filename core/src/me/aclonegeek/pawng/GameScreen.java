@@ -169,6 +169,7 @@ public class GameScreen implements Screen {
                 angle = ball.getReflectAngle() * position;
 
                 velocity.setAngle(angle);
+                velocity.scl(ball.getSpeedModifier());
                 ball.setVelocity(velocity.x, velocity.y);
             }
         } else if(ball.getBounds().overlaps(paddle2.getBounds())) {
@@ -185,6 +186,7 @@ public class GameScreen implements Screen {
                 angle = ball.getReflectAngle() * position;
 
                 velocity.setAngle(180f - angle);
+                velocity.scl(ball.getSpeedModifier());
                 ball.setVelocity(velocity.x, velocity.y);
             }
         }
