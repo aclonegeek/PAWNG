@@ -41,7 +41,8 @@ public class GameScreen implements Screen {
     private Texture paddleImage;
     private Texture ballImage;
 
-    private Sound hit;
+    private Sound hitSound;
+    private float hitSoundVolume = 0.1f;
 
     private OrthographicCamera camera;
 
@@ -64,7 +65,7 @@ public class GameScreen implements Screen {
         paddleImage = new Texture(Gdx.files.internal("img/paddle.png"));
         ballImage = new Texture(Gdx.files.internal("img/ball.png"));
 
-        hit = Gdx.audio.newSound(Gdx.files.internal("audio/hit.wav"));
+        hitSound = Gdx.audio.newSound(Gdx.files.internal("audio/hit.wav"));
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -156,6 +157,8 @@ public class GameScreen implements Screen {
         // Ball-paddle collision logic
         if(ball.getBounds().overlaps(paddle1.getBounds())) {
             if(ball.left() < paddle1.right() && ball.right() > paddle1.right()) {
+                hitSound.setVolume(hitSound.play(), hitSoundVolume);
+
                 ball.move(paddle1.right(), ball.getY());
                 ball.reflect(true, false);
 
@@ -170,6 +173,8 @@ public class GameScreen implements Screen {
             }
         } else if(ball.getBounds().overlaps(paddle2.getBounds())) {
             if(ball.right() > paddle2.left() && ball.left() < paddle2.left()) {
+                hitSound.setVolume(hitSound.play(), hitSoundVolume);
+
                 ball.move(paddle2.left() - ball.getWidth(), ball.getY());
                 ball.reflect(true, false);
 
@@ -289,6 +294,6 @@ public class GameScreen implements Screen {
     public void dispose() {
         paddleImage.dispose();
         ballImage.dispose();
-        hit.dispose();
+        hitSound.dispose();
     }
 }
