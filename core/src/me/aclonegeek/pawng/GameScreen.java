@@ -93,7 +93,7 @@ public class GameScreen implements Screen {
 
         ballLogic(dt);
         paddle1Logic(dt);
-        //paddle2Logic(dt);
+        paddle2Logic(dt);
     }
 
     public void ballLogic(float dt) {
@@ -187,6 +187,43 @@ public class GameScreen implements Screen {
         if(paddle1.bottom() < fieldBottom) {
             paddle1.move(paddle1.getX(), fieldBottom);
             paddle1.setVelocity(0f, 0f);
+        }
+    }
+
+    private void paddle2Logic(float dt) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            moveUp = true;
+            moveDown = false;
+        }
+
+        // Move paddle down
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            moveUp = false;
+            moveDown = true;
+        }
+
+        if(moveUp) {
+            paddle2.setVelocity(0f, paddle2.getSpeed());
+            moveUp = false;
+        } else if(moveDown) {
+            paddle2.setVelocity(0f, -paddle2.getSpeed());
+            moveDown = false;
+        } else {
+            paddle2.setVelocity(0f, 0f);
+        }
+
+        paddle2.integrate(dt);
+        paddle2.updateBounds();
+
+        // Collision logic
+        if(paddle2.top() > fieldTop) {
+            paddle2.move(paddle2.getX(), fieldTop - paddle2.getHeight());
+            paddle2.setVelocity(0f, 0f);
+        }
+
+        if(paddle2.bottom() < fieldBottom) {
+            paddle2.move(paddle2.getX(), fieldBottom);
+            paddle2.setVelocity(0f, 0f);
         }
     }
 
