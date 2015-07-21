@@ -142,9 +142,9 @@ public class GameScreen implements Screen {
                 ball.reflect(true, false);
 
                 ballCenterY = ball.getY() + (ball.getHeight() / 2);
-                paddleCenterY = paddle1.getY() + (paddle1.getHeight() / 2);
+                paddleCenterY = paddle2.getY() + (paddle2.getHeight() / 2);
                 difference = ballCenterY - paddleCenterY;
-                position = difference / paddle1.getHeight();
+                position = difference / paddle2.getHeight();
                 angle = ball.getReflectAngle() * position;
 
                 velocity.setAngle(180f - angle);
