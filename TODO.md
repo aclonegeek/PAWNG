@@ -4,7 +4,9 @@
 - make a nice game screen / gui
 --- > scores
 - make an options menu (to set audio volume, etc)
+- make a pause menu
 - make the ball start off in a random (randomly chooses out of 4 choices) direction
+- fancy ball trail
 - implement states and state handling (if possible)
 - implement use of viewport to simplify code
 - add music?
