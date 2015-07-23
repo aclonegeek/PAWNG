@@ -9,7 +9,6 @@ public class Score {
 
     public void setScore1(int score1) {
         this.score1 = score1;
-
     }
 
     public void setScore2(int score2) {
