@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -15,6 +16,8 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class GameScreen implements Screen {
     private final PAWNG game;
+
+    private Score score = new Score();
 
     private Ball ball = new Ball();
     private Paddle paddle1 = new Paddle();
@@ -37,6 +40,9 @@ public class GameScreen implements Screen {
     private boolean paddle1MoveUp = false;
     private boolean paddle2MoveDown = false;
     private boolean paddle2MoveUp = false;
+
+    private BitmapFont score1;
+    private BitmapFont score2;
 
     private Texture paddleImage;
     private Texture ballImage;
@@ -62,6 +68,9 @@ public class GameScreen implements Screen {
     }
 
     private void loadAssets() {
+        score1 = new BitmapFont();
+        score2 = new BitmapFont();
+
         paddleImage = new Texture(Gdx.files.internal("img/paddle.png"));
         ballImage = new Texture(Gdx.files.internal("img/ball.png"));
 
@@ -72,6 +81,10 @@ public class GameScreen implements Screen {
     }
 
     private void reset() {
+        // Reset score
+        score.setScore1(0);
+        score.setScore2(0);
+
         // Reset object locations
         ball.move((Gdx.graphics.getWidth() / 2) - ball.getWidth(), (Gdx.graphics.getHeight() / 2) - ball.getHeight()); // Center ball\
         velocity = ball.getVelocity();
@@ -266,6 +279,8 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
+            score1.draw(game.batch, Integer.toString(score.getScore1()), 320, 700);
+            score2.draw(game.batch, Integer.toString(score.getScore2()), 960, 700);
             game.batch.draw(ballImage, ball.getX(), ball.getY());
             game.batch.draw(paddleImage, paddle1.getX(), paddle1.getY());
             game.batch.draw(paddleImage, paddle2.getX(), paddle2.getY());
@@ -294,6 +309,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        score1.dispose();
+        score2.dispose();
         paddleImage.dispose();
         ballImage.dispose();
         hitSound.dispose();
