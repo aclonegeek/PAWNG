@@ -17,8 +17,6 @@ import com.badlogic.gdx.math.Vector2;
 public class GameScreen implements Screen {
     private final PAWNG game;
 
-    private Score score = new Score();
-
     private Ball ball = new Ball();
     private Paddle paddle1 = new Paddle();
     private Paddle paddle2 = new Paddle();
@@ -41,8 +39,10 @@ public class GameScreen implements Screen {
     private boolean paddle2MoveDown = false;
     private boolean paddle2MoveUp = false;
 
-    private BitmapFont score1;
-    private BitmapFont score2;
+    private BitmapFont score;
+
+    private int paddle1Score;
+    private int paddle2Score;
 
     private Texture paddleImage;
     private Texture ballImage;
@@ -68,8 +68,7 @@ public class GameScreen implements Screen {
     }
 
     private void loadAssets() {
-        score1 = new BitmapFont();
-        score2 = new BitmapFont();
+        score = new BitmapFont();
 
         paddleImage = new Texture(Gdx.files.internal("img/paddle.png"));
         ballImage = new Texture(Gdx.files.internal("img/ball.png"));
@@ -82,11 +81,29 @@ public class GameScreen implements Screen {
 
     private void reset() {
         // Reset score
-        score.setScore1(0);
-        score.setScore2(0);
+        paddle1Score = 0;
+        paddle2Score = 0;
 
         // Reset object locations
         ball.move((Gdx.graphics.getWidth() / 2) - ball.getWidth(), (Gdx.graphics.getHeight() / 2) - ball.getHeight()); // Center ball\
+        velocity = ball.getVelocity();
+        velocity.set(ball.getSpeed(), 0f);
+        velocity.setAngle(45f);
+        ball.setVelocity(velocity.x, velocity.y);
+
+        paddle1.move(field.x + (field.width * 0.1f), field.y + (field.height - paddle1.getHeight()) / 2);
+        paddle2.move(field.x + field.width - (field.width * 0.1f), field.y + (field.height - paddle2.getHeight()) / 2);
+    }
+
+    private void score(boolean player1Score) {
+        if(player1Score) {
+            paddle1Score++;
+        } else {
+            paddle2Score++;
+        }
+
+        // Reset object locations
+        ball.move((Gdx.graphics.getWidth() / 2) - ball.getWidth(), (Gdx.graphics.getHeight() / 2) - ball.getHeight()); // Center ball
         velocity = ball.getVelocity();
         velocity.set(ball.getSpeed(), 0f);
         velocity.setAngle(45f);
@@ -158,13 +175,11 @@ public class GameScreen implements Screen {
         }
 
         if(ball.left() < fieldLeft) {
-            ball.move(fieldLeft, ball.getY());
-            ball.reflect(true, false);
+            score(false); // Player 2 scores
         }
 
         if(ball.right() > fieldRight) {
-            ball.move(fieldRight - ball.getHeight(), ball.getY());
-            ball.reflect(true, false);
+            score(true); // Player 1 scores
         }
 
         // Ball-paddle collision logic
@@ -279,8 +294,8 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-            score1.draw(game.batch, Integer.toString(score.getScore1()), 320, 700);
-            score2.draw(game.batch, Integer.toString(score.getScore2()), 960, 700);
+            score.draw(game.batch, Integer.toString(paddle1Score), 320, 700);
+            score.draw(game.batch, Integer.toString(paddle2Score), 960, 700);
             game.batch.draw(ballImage, ball.getX(), ball.getY());
             game.batch.draw(paddleImage, paddle1.getX(), paddle1.getY());
             game.batch.draw(paddleImage, paddle2.getX(), paddle2.getY());
@@ -309,8 +324,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        score1.dispose();
-        score2.dispose();
+        score.dispose();
         paddleImage.dispose();
         ballImage.dispose();
         hitSound.dispose();
