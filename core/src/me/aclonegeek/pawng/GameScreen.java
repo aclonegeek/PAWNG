@@ -39,8 +39,6 @@ public class GameScreen implements Screen {
     private boolean paddle2MoveDown = false;
     private boolean paddle2MoveUp = false;
 
-    private BitmapFont scoreFont;
-
     private int paddle1Score;
     private int paddle2Score;
 
@@ -68,8 +66,6 @@ public class GameScreen implements Screen {
     }
 
     private void loadAssets() {
-        scoreFont = new BitmapFont();
-
         paddleImage = new Texture(Gdx.files.internal("img/paddle.png"));
         ballImage = new Texture(Gdx.files.internal("img/ball.png"));
 
@@ -294,8 +290,8 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-            scoreFont.draw(game.batch, Integer.toString(paddle1Score), 320, 700);
-            scoreFont.draw(game.batch, Integer.toString(paddle2Score), 960, 700);
+            game.font.draw(game.batch, Integer.toString(paddle1Score), 320, 700);
+            game.font.draw(game.batch, Integer.toString(paddle2Score), 960, 700);
             game.batch.draw(ballImage, ball.getX(), ball.getY());
             game.batch.draw(paddleImage, paddle1.getX(), paddle1.getY());
             game.batch.draw(paddleImage, paddle2.getX(), paddle2.getY());
@@ -324,7 +320,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        scoreFont.dispose();
         paddleImage.dispose();
         ballImage.dispose();
         hitSound.dispose();
