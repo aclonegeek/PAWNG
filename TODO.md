@@ -1,15 +1,30 @@
-- make a nice todo list
-- make a nice main menu
---- > center text
-- make a nice game screen / gui
---- > scores
-- make an options menu (to set audio volume, etc)
-- make a pause menu
-- make the ball start off in a random (randomly chooses out of 4 choices) direction
-- fancy ball trail
-- implement states and state handling (if possible)
-- implement use of viewport to simplify code
-- add music?
-- maybe remove the use of textures, or utilize them and make nice textures
-- add comments
-- remove translate method?
+# TODO List
+
+## Front-end
+- Fancier
+    - Main Menu
+        - Background
+        - Buttons
+        - Center text
+    - Game Screen / GUI
+        - Background
+        - Scores
+    - Textures
+        - Detailed paddles and ball
+        - Ball trail
+
+## Back-end
+- Create
+    - Menus
+        - Options
+        - Pause
+- Modifications
+    - Ball
+        - Start off in a random direction (4 choices: topleft, topright, bottomleft, bottomright)
+    - Cleanup
+        - Remove translate method?
+- Implement
+    - States and state handling
+    - Viewport
+    - Music
+    - Comments
