@@ -3,9 +3,7 @@
 ## Front-end
 - Fancier
     - Main Menu
-        - Background
-        - Buttons
-        - Center text
+        - Game title
     - Game Screen / GUI
         - Background
         - Scores
