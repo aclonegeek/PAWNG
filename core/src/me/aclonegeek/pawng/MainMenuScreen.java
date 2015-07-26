@@ -83,9 +83,9 @@ public class MainMenuScreen implements Screen {
         playButton.setPosition((Gdx.graphics.getWidth() / 2) - (playButton.getWidth() / 2), 550f);
         stage.addActor(playButton);
 
-        TextButton optionsButtons = new TextButton("OPTIONS", buttonSkin);
-        optionsButtons.setPosition((Gdx.graphics.getWidth() / 2) - (optionsButtons.getWidth() / 2), 450f);
-        stage.addActor(optionsButtons);
+        TextButton optionsButton = new TextButton("OPTIONS", buttonSkin);
+        optionsButton.setPosition((Gdx.graphics.getWidth() / 2) - (optionsButton.getWidth() / 2), 450f);
+        stage.addActor(optionsButton);
 
         TextButton exitButton = new TextButton("EXIT", buttonSkin);
         exitButton.setPosition((Gdx.graphics.getWidth() / 2) - (exitButton.getWidth() / 2), 350f);
