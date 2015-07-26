@@ -4,21 +4,27 @@
 - Fancier
     - Main Menu
         - Game title
+    - Options
+        - Buttons
+            - Navigation
+            - Settings
+                - Drop down for certain ones (resolution)
     - Game Screen / GUI
         - Background
         - Scores
     - Textures
         - Detailed paddles and ball
         - Ball trail
+        - Paddle trail?
 
 ## Back-end
 - Create
     - Menus
-        - Options
         - Pause
 - Modifications
     - Ball
         - Start off in a random direction (4 choices: topleft, topright, bottomleft, bottomright)
+        - Cap ball's max speed
     - Cleanup
         - Remove translate method?
 - Implement
