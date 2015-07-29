@@ -23,7 +23,6 @@
         - Pause
 - Modifications
     - Ball
-        - Start off in a random direction (4 choices: topleft, topright, bottomleft, bottomright)
         - Cap ball's max speed
     - Cleanup
         - Remove translate method?
