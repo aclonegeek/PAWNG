@@ -19,15 +19,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 public class MainMenuScreen implements Screen {
     private final PAWNG game;
 
-    private static final float BUTTON_WIDTH = 300f;
-    private static final float BUTTON_HEIGHT = 50f;
+    private static final int BUTTON_WIDTH = 300;
+    private static final int BUTTON_HEIGHT = 50;
 
     private Stage stage = new Stage();
 
     private Skin buttonSkin = new Skin();
 /*    private Skin labelSkin = new Skin();*/
 
-    private Pixmap pixmap = new Pixmap((int)BUTTON_WIDTH, (int)BUTTON_HEIGHT, Pixmap.Format.RGB888);
+    private Pixmap pixmap = new Pixmap(BUTTON_WIDTH, BUTTON_HEIGHT, Pixmap.Format.RGB888);
 
     OrthographicCamera camera;
 
