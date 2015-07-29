@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.Random;
+
 /**
  * Created by RandyT on 7/13/2015.
  */
@@ -83,7 +85,7 @@ public class GameScreen implements Screen {
         ball.move((Gdx.graphics.getWidth() / 2) - ball.getWidth(), (Gdx.graphics.getHeight() / 2) - ball.getHeight()); // Center ball\
         velocity = ball.getVelocity();
         velocity.set(ball.getSpeed(), 0f);
-        velocity.setAngle(45f);
+        velocity.setAngle(randomAngle());
         ball.setVelocity(velocity.x, velocity.y);
 
         paddle1.move(field.x + (field.width * 0.1f), field.y + (field.height - paddle1.getHeight()) / 2);
@@ -101,11 +103,27 @@ public class GameScreen implements Screen {
         ball.move((Gdx.graphics.getWidth() / 2) - ball.getWidth(), (Gdx.graphics.getHeight() / 2) - ball.getHeight()); // Center ball
         velocity = ball.getVelocity();
         velocity.set(ball.getSpeed(), 0f);
-        velocity.setAngle(45f);
+        velocity.setAngle(randomAngle());
         ball.setVelocity(velocity.x, velocity.y);
 
         paddle1.move(field.x + (field.width * 0.1f), field.y + (field.height - paddle1.getHeight()) / 2);
         paddle2.move(field.x + field.width - (field.width * 0.1f), field.y + (field.height - paddle2.getHeight()) / 2);
+    }
+
+    public float randomAngle() {
+        Random rand = new Random();
+        int x = rand.nextInt(4) + 1;
+
+        System.out.printf("Angle: %d\n", x);
+
+        float angle = 45f;
+
+        if (x == 1) angle = 45f;
+        if (x == 2) angle = 135f;
+        if (x == 3) angle = 225f;
+        if (x == 4) angle = 315f;
+
+        return angle;
     }
 
     private void processEvents(float dt) {
