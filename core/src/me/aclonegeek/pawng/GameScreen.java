@@ -277,11 +277,11 @@ public class GameScreen implements Screen {
         dt = Gdx.graphics.getDeltaTime();
 
         //update(dt); - use this for states down the road (if i can get states working :()
-        draw(dt);
+        draw();
         processEvents(dt);
     }
 
-    private void draw(float dt) {
+    private void draw() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
