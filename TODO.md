@@ -27,6 +27,8 @@
     - Cleanup
         - Remove translate method?
 - Implement
+    - Ability to set max score (so matches can actually end)
+    - Win/Lose screens
     - States and state handling
     - Viewport
     - Music
