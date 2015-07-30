@@ -63,7 +63,7 @@ public class GameScreen implements Screen {
         fieldRight = field.x + field.width;
 
         loadAssets();
-        reset();
+        reset(true);
     }
 
     private void loadAssets() {
@@ -76,10 +76,12 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    private void reset() {
+    private void reset(boolean resetScore) {
         // Reset score
-        paddle1Score = 0;
-        paddle2Score = 0;
+        if(resetScore) {
+            paddle1Score = 0;
+            paddle2Score = 0;
+        }
 
         // Reset object locations
         ball.move((Gdx.graphics.getWidth() / 2) - ball.getWidth(), (Gdx.graphics.getHeight() / 2) - ball.getHeight()); // Center ball\
@@ -99,15 +101,7 @@ public class GameScreen implements Screen {
             paddle2Score++;
         }
 
-        // Reset object locations
-        ball.move((Gdx.graphics.getWidth() / 2) - ball.getWidth(), (Gdx.graphics.getHeight() / 2) - ball.getHeight()); // Center ball
-        velocity = ball.getVelocity();
-        velocity.set(ball.getSpeed(), 0f);
-        velocity.setAngle(randomAngle());
-        ball.setVelocity(velocity.x, velocity.y);
-
-        paddle1.move(field.x + (field.width * 0.1f), field.y + (field.height - paddle1.getHeight()) / 2);
-        paddle2.move(field.x + field.width - (field.width * 0.1f), field.y + (field.height - paddle2.getHeight()) / 2);
+        reset(false);
     }
 
     public float randomAngle() {
@@ -142,7 +136,7 @@ public class GameScreen implements Screen {
 
         // Reset game screen
         if(Gdx.input.isKeyPressed(Input.Keys.R)) {
-            reset();
+            reset(true);
         }
 
         // Paddle1 input
