@@ -18,8 +18,8 @@ public class Ball extends GameObject {
     }
 
     public void reflect(boolean x, boolean y) {
-        if(x) velocity.x *= -1;
-        if(y) velocity.y *= -1;
+        if (x) velocity.x *= -1;
+        if (y) velocity.y *= -1;
 
         setVelocity(velocity.x, velocity.y);
     }
