@@ -78,7 +78,7 @@ public class GameScreen implements Screen {
 
     private void reset(boolean resetScore) {
         // Reset score
-        if(resetScore) {
+        if (resetScore) {
             paddle1Score = 0;
             paddle2Score = 0;
         }
@@ -95,7 +95,7 @@ public class GameScreen implements Screen {
     }
 
     private void score(boolean player1Score) {
-        if(player1Score) {
+        if (player1Score) {
             paddle1Score++;
         } else {
             paddle2Score++;
@@ -135,7 +135,7 @@ public class GameScreen implements Screen {
         }
 
         // Reset game screen
-        if(Gdx.input.isKeyPressed(Input.Keys.R)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.R)) {
             reset(true);
         }
 
@@ -171,27 +171,27 @@ public class GameScreen implements Screen {
         ball.updateBounds();
 
         // Collision logic
-        if(ball.top() > fieldTop) {
+        if (ball.top() > fieldTop) {
             ball.move(ball.getX(), fieldTop - ball.getHeight());
             ball.reflect(false, true);
         }
 
-        if(ball.bottom() < fieldBottom) {
+        if (ball.bottom() < fieldBottom) {
             ball.move(ball.getX(), fieldBottom);
             ball.reflect(false, true);
         }
 
-        if(ball.left() < fieldLeft) {
+        if (ball.left() < fieldLeft) {
             score(false); // Player 2 scores
         }
 
-        if(ball.right() > fieldRight) {
+        if (ball.right() > fieldRight) {
             score(true); // Player 1 scores
         }
 
         // Ball-paddle collision logic
-        if(ball.getBounds().overlaps(paddle1.getBounds())) {
-            if(ball.left() < paddle1.right() && ball.right() > paddle1.right()) {
+        if (ball.getBounds().overlaps(paddle1.getBounds())) {
+            if (ball.left() < paddle1.right() && ball.right() > paddle1.right()) {
                 hitSound.setVolume(hitSound.play(), hitSoundVolume);
 
                 ball.move(paddle1.right(), ball.getY());
@@ -207,8 +207,8 @@ public class GameScreen implements Screen {
                 velocity.scl(ball.getSpeedModifier());
                 ball.setVelocity(velocity.x, velocity.y);
             }
-        } else if(ball.getBounds().overlaps(paddle2.getBounds())) {
-            if(ball.right() > paddle2.left() && ball.left() < paddle2.left()) {
+        } else if (ball.getBounds().overlaps(paddle2.getBounds())) {
+            if (ball.right() > paddle2.left() && ball.left() < paddle2.left()) {
                 hitSound.setVolume(hitSound.play(), hitSoundVolume);
 
                 ball.move(paddle2.left() - ball.getWidth(), ball.getY());
@@ -228,7 +228,7 @@ public class GameScreen implements Screen {
     }
 
     public void paddle1Logic(float dt) {
-        if(paddle1MoveUp) {
+        if (paddle1MoveUp) {
             paddle1.setVelocity(0f, paddle1.getSpeed());
             paddle1MoveUp = false;
         } else if(paddle1MoveDown) {
@@ -242,22 +242,22 @@ public class GameScreen implements Screen {
         paddle1.updateBounds();
 
         // Collision logic
-        if(paddle1.top() > fieldTop) {
+        if (paddle1.top() > fieldTop) {
             paddle1.move(paddle1.getX(), fieldTop - paddle1.getHeight());
             paddle1.setVelocity(0f, 0f);
         }
 
-        if(paddle1.bottom() < fieldBottom) {
+        if (paddle1.bottom() < fieldBottom) {
             paddle1.move(paddle1.getX(), fieldBottom);
             paddle1.setVelocity(0f, 0f);
         }
     }
 
     private void paddle2Logic(float dt) {
-        if(paddle2MoveUp) {
+        if (paddle2MoveUp) {
             paddle2.setVelocity(0f, paddle2.getSpeed());
             paddle2MoveUp = false;
-        } else if(paddle2MoveDown) {
+        } else if (paddle2MoveDown) {
             paddle2.setVelocity(0f, -paddle2.getSpeed());
             paddle2MoveDown = false;
         } else {
@@ -268,12 +268,12 @@ public class GameScreen implements Screen {
         paddle2.updateBounds();
 
         // Collision logic
-        if(paddle2.top() > fieldTop) {
+        if (paddle2.top() > fieldTop) {
             paddle2.move(paddle2.getX(), fieldTop - paddle2.getHeight());
             paddle2.setVelocity(0f, 0f);
         }
 
-        if(paddle2.bottom() < fieldBottom) {
+        if (paddle2.bottom() < fieldBottom) {
             paddle2.move(paddle2.getX(), fieldBottom);
             paddle2.setVelocity(0f, 0f);
         }
@@ -288,7 +288,6 @@ public class GameScreen implements Screen {
     public void render(float dt) {
         dt = Gdx.graphics.getDeltaTime();
 
-        //update(dt); - use this for states down the road (if i can get states working :()
         draw();
         processEvents(dt);
     }
