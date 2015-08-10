@@ -18,7 +18,7 @@ public class OptionsScreen implements Screen {
     }
 
     public void handleInput() {
-        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MainMenuScreen(game));
         }
     }
