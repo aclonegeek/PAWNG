@@ -75,14 +75,6 @@ public abstract class GameObject {
         return velocity;
     }
 
-    public float getVelocityX() {
-        return velocity.x;
-    }
-
-    public float getVelocityY() {
-        return velocity.y;
-    }
-
     public void setVelocity(float x, float y) {
         velocity.set(x, y);
     }
@@ -90,10 +82,6 @@ public abstract class GameObject {
 // Methods
     public void move(float x, float y) {
         position.set(x, y);
-    }
-
-    public void translate(float x, float y) {
-        position.add(x, y);
     }
 
     public void integrate(float dt) {
