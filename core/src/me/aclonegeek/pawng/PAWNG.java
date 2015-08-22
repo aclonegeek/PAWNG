@@ -12,7 +12,7 @@ public class PAWNG extends Game {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 
-		this.setScreen(new MainMenuScreen(this));
+		setScreen(new MainMenuScreen(this));
 	}
 
 	public void render() {
