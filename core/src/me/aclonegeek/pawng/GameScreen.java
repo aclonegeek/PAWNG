@@ -6,11 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.Random;
 
 /**
  * Created by RandyT on 7/13/2015.
@@ -18,16 +14,9 @@ import java.util.Random;
 public class GameScreen implements Screen {
     private final PAWNG game;
 
-    private Ball ball = new Ball();
-    private Paddle paddle1 = new Paddle();
-    private Paddle paddle2 = new Paddle();
-
-    private Rectangle field = new Rectangle();
-
-    private float fieldTop;
-    private float fieldBottom;
-    private float fieldLeft;
-    private float fieldRight;
+    private Ball ball;
+    private Paddle paddle1;
+    private Paddle paddle2;
 
     private float ballCenterY;
     private float paddleCenterY;
@@ -43,9 +32,6 @@ public class GameScreen implements Screen {
     private int paddle1Score;
     private int paddle2Score;
 
-    private Texture paddleImage;
-    private Texture ballImage;
-
     private Sound hitSound;
     private float hitSoundVolume = 0.1f;
 
@@ -53,22 +39,21 @@ public class GameScreen implements Screen {
 
     private Vector2 velocity;
 
+    public static int scored = 0;
+
     public GameScreen(final PAWNG game) {
         this.game = game;
 
-        field.set(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        fieldTop = field.y + field.height;
-        fieldBottom = field.y;
-        fieldLeft = field.x;
-        fieldRight = field.x + field.width;
-
-        loadAssets();
+        initialize();
         reset(true);
+
+        System.out.println(scored);
     }
 
-    private void loadAssets() {
-        paddleImage = new Texture(Gdx.files.internal("img/paddle.png"));
-        ballImage = new Texture(Gdx.files.internal("img/ball.png"));
+    private void initialize() {
+        ball = new Ball(32, 32);
+        paddle1 = new Paddle(20, 100);
+        paddle2 = new Paddle(20, 100);
 
         hitSound = Gdx.audio.newSound(Gdx.files.internal("audio/hit.wav"));
 
@@ -79,53 +64,107 @@ public class GameScreen implements Screen {
     private void reset(boolean resetScore) {
         // Reset score
         if (resetScore) {
+            scored = 0;
             paddle1Score = 0;
             paddle2Score = 0;
         }
 
         // Reset object locations
-        ball.move((Gdx.graphics.getWidth() / 2) - ball.getWidth(), (Gdx.graphics.getHeight() / 2) - ball.getHeight()); // Center ball\
-        velocity = ball.getVelocity();
-        velocity.set(ball.getSpeed(), 0f);
-        velocity.setAngle(randomAngle());
-        ball.setVelocity(velocity.x, velocity.y);
+        ball.reset();
 
-        paddle1.move(field.x + (field.width * 0.1f), field.y + (field.height - paddle1.getHeight()) / 2);
-        paddle2.move(field.x + field.width - (field.width * 0.1f), field.y + (field.height - paddle2.getHeight()) / 2);
+        paddle1.move((Gdx.graphics.getWidth() * 0.1f), (Gdx.graphics.getHeight() - paddle1.getHeight()) / 2);
+        paddle2.move(Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() * 0.1f), (Gdx.graphics.getHeight() - paddle2.getHeight()) / 2);
     }
 
-    private void score(boolean player1Score) {
-        if (player1Score) {
-            paddle1Score++;
+    private void paddle1Logic(float dt) {
+        if (paddle1MoveUp) {
+            paddle1.setVelocity(0f, paddle1.getSpeed());
+            paddle1MoveUp = false;
+        } else if(paddle1MoveDown) {
+            paddle1.setVelocity(0f, -paddle1.getSpeed());
+            paddle1MoveDown = false;
         } else {
+            paddle1.setVelocity(0f, 0f);
+        }
+
+        paddle1.integrate(dt);
+        paddle1.updateBounds();
+
+        // Collision logic
+        if (paddle1.top() > Gdx.graphics.getHeight()) {
+            paddle1.move(paddle1.getX(), Gdx.graphics.getHeight() - paddle1.getHeight());
+            paddle1.setVelocity(0f, 0f);
+        }
+
+        if (paddle1.bottom() < 0) {
+            paddle1.move(paddle1.getX(), 0);
+            paddle1.setVelocity(0f, 0f);
+        }
+    }
+
+    private void paddle2Logic(float dt) {
+        if (paddle2MoveUp) {
+            paddle2.setVelocity(0f, paddle2.getSpeed());
+            paddle2MoveUp = false;
+        } else if (paddle2MoveDown) {
+            paddle2.setVelocity(0f, -paddle2.getSpeed());
+            paddle2MoveDown = false;
+        } else {
+            paddle2.setVelocity(0f, 0f);
+        }
+
+        paddle2.integrate(dt);
+        paddle2.updateBounds();
+
+        // Collision logic
+        if (paddle2.top() > Gdx.graphics.getHeight()) {
+            paddle2.move(paddle2.getX(), Gdx.graphics.getHeight() - paddle2.getHeight());
+            paddle2.setVelocity(0f, 0f);
+        }
+
+        if (paddle2.bottom() < 0) {
+            paddle2.move(paddle2.getX(), 0);
+            paddle2.setVelocity(0f, 0f);
+        }
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float dt) {
+        dt = Gdx.graphics.getDeltaTime();
+
+        draw();
+        update(dt);
+    }
+
+    private void checkIfScored() {
+        if (scored == 1) {
+            paddle1Score++;
+            scored = 0;
+        } else if (scored == 2){
             paddle2Score++;
+            scored = 0;
+        } else {
+            return;
         }
 
         reset(false);
     }
 
-    public float randomAngle() {
-        Random rand = new Random();
-        int x = rand.nextInt(4) + 1;
-
-        System.out.printf("Angle: %d\n", x);
-
-        float angle = 45f;
-
-        if (x == 1) angle = 45f;
-        if (x == 2) angle = 135f;
-        if (x == 3) angle = 225f;
-        if (x == 4) angle = 315f;
-
-        return angle;
-    }
-
-    private void processEvents(float dt) {
+    private void update(float dt) {
         handleInput();
 
-        ballLogic(dt);
+        ball.update(dt);
         paddle1Logic(dt);
         paddle2Logic(dt);
+
+        handleCollisions();
+
+        checkIfScored();
     }
 
     private void handleInput() {
@@ -166,29 +205,7 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void ballLogic(float dt) {
-        ball.integrate(dt);
-        ball.updateBounds();
-
-        // Collision logic
-        if (ball.top() > fieldTop) {
-            ball.move(ball.getX(), fieldTop - ball.getHeight());
-            ball.reflect(false, true);
-        }
-
-        if (ball.bottom() < fieldBottom) {
-            ball.move(ball.getX(), fieldBottom);
-            ball.reflect(false, true);
-        }
-
-        if (ball.left() < fieldLeft) {
-            score(false); // Player 2 scores
-        }
-
-        if (ball.right() > fieldRight) {
-            score(true); // Player 1 scores
-        }
-
+    private void handleCollisions() {
         // Ball-paddle collision logic
         if (ball.getBounds().overlaps(paddle1.getBounds())) {
             if (ball.left() < paddle1.right() && ball.right() > paddle1.right()) {
@@ -227,71 +244,6 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void paddle1Logic(float dt) {
-        if (paddle1MoveUp) {
-            paddle1.setVelocity(0f, paddle1.getSpeed());
-            paddle1MoveUp = false;
-        } else if(paddle1MoveDown) {
-            paddle1.setVelocity(0f, -paddle1.getSpeed());
-            paddle1MoveDown = false;
-        } else {
-            paddle1.setVelocity(0f, 0f);
-        }
-
-        paddle1.integrate(dt);
-        paddle1.updateBounds();
-
-        // Collision logic
-        if (paddle1.top() > fieldTop) {
-            paddle1.move(paddle1.getX(), fieldTop - paddle1.getHeight());
-            paddle1.setVelocity(0f, 0f);
-        }
-
-        if (paddle1.bottom() < fieldBottom) {
-            paddle1.move(paddle1.getX(), fieldBottom);
-            paddle1.setVelocity(0f, 0f);
-        }
-    }
-
-    private void paddle2Logic(float dt) {
-        if (paddle2MoveUp) {
-            paddle2.setVelocity(0f, paddle2.getSpeed());
-            paddle2MoveUp = false;
-        } else if (paddle2MoveDown) {
-            paddle2.setVelocity(0f, -paddle2.getSpeed());
-            paddle2MoveDown = false;
-        } else {
-            paddle2.setVelocity(0f, 0f);
-        }
-
-        paddle2.integrate(dt);
-        paddle2.updateBounds();
-
-        // Collision logic
-        if (paddle2.top() > fieldTop) {
-            paddle2.move(paddle2.getX(), fieldTop - paddle2.getHeight());
-            paddle2.setVelocity(0f, 0f);
-        }
-
-        if (paddle2.bottom() < fieldBottom) {
-            paddle2.move(paddle2.getX(), fieldBottom);
-            paddle2.setVelocity(0f, 0f);
-        }
-    }
-
-    @Override
-    public void show() {
-
-    }
-
-    @Override
-    public void render(float dt) {
-        dt = Gdx.graphics.getDeltaTime();
-
-        draw();
-        processEvents(dt);
-    }
-
     private void draw() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -302,9 +254,9 @@ public class GameScreen implements Screen {
         game.batch.begin();
             game.font.draw(game.batch, Integer.toString(paddle1Score), 320, 700);
             game.font.draw(game.batch, Integer.toString(paddle2Score), 960, 700);
-            game.batch.draw(ballImage, ball.getX(), ball.getY());
-            game.batch.draw(paddleImage, paddle1.getX(), paddle1.getY());
-            game.batch.draw(paddleImage, paddle2.getX(), paddle2.getY());
+            game.batch.draw(Ball.ballTexture, ball.getX(), ball.getY());
+            game.batch.draw(Paddle.paddleTexture, paddle1.getX(), paddle1.getY());
+            game.batch.draw(Paddle.paddleTexture, paddle2.getX(), paddle2.getY());
         game.batch.end();
     }
 
@@ -330,8 +282,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        paddleImage.dispose();
-        ballImage.dispose();
+        Ball.ballTexture.dispose();
+        Paddle.paddleTexture.dispose();
         hitSound.dispose();
     }
 }
