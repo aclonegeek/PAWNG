@@ -34,7 +34,10 @@ public class Ball extends GameObject {
     public void update(float dt) {
         integrate(dt);
         updateBounds();
+        contain();
+    }
 
+    private void contain() {
         // Collision logic
         if (top() > Gdx.graphics.getHeight()) {
             move(getX(), Gdx.graphics.getHeight() - getHeight());
