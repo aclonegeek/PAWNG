@@ -16,6 +16,10 @@ public abstract class GameObject {
         bounds.setHeight(height);
     }
 
+    public abstract void update(float dt);
+
+    public abstract void reset();
+
 // Getters & Setters
     public Rectangle getBounds() {
         updateBounds();
