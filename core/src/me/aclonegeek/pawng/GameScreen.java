@@ -52,6 +52,8 @@ public class GameScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        velocity = ball.getVelocity();
     }
 
     private void reset(boolean resetScore) {
