@@ -18,8 +18,6 @@ public class GameScreen implements Screen {
     private Paddle paddle1;
     private Paddle paddle2;
 
-    private float ballCenterY;
-    private float paddleCenterY;
     private float difference;
     private float position;
     private float angle;
@@ -130,9 +128,7 @@ public class GameScreen implements Screen {
                 ball.move(paddle1.right(), ball.getY());
                 ball.reflect(true, false);
 
-                ballCenterY = ball.getY() + (ball.getHeight() / 2);
-                paddleCenterY = paddle1.getY() + (paddle1.getHeight() / 2);
-                difference = ballCenterY - paddleCenterY;
+                difference = ball.centerY() - paddle1.centerY();
                 position = difference / paddle1.getHeight();
                 angle = ball.getReflectAngle() * position;
 
@@ -147,9 +143,7 @@ public class GameScreen implements Screen {
                 ball.move(paddle2.left() - ball.getWidth(), ball.getY());
                 ball.reflect(true, false);
 
-                ballCenterY = ball.getY() + (ball.getHeight() / 2);
-                paddleCenterY = paddle2.getY() + (paddle2.getHeight() / 2);
-                difference = ballCenterY - paddleCenterY;
+                difference = ball.centerY() - paddle2.centerY();
                 position = difference / paddle2.getHeight();
                 angle = ball.getReflectAngle() * position;
 

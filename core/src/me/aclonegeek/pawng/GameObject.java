@@ -67,6 +67,10 @@ public abstract class GameObject {
         return bounds.x + bounds.width;
     }
 
+    public float centerY() {
+        return position.y + (bounds.height / 2);
+    }
+
     public Vector2 getPosition() {
         return position;
     }
