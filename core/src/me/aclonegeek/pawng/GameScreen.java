@@ -18,10 +18,6 @@ public class GameScreen implements Screen {
     private Paddle paddle1;
     private Paddle paddle2;
 
-    private float difference;
-    private float position;
-    private float angle;
-
     private int paddle1Score;
     private int paddle2Score;
 
@@ -121,6 +117,10 @@ public class GameScreen implements Screen {
 
     private void handleCollisions() {
         // Ball-paddle collision logic
+        float difference;
+        float position;
+        float angle;
+
         if (ball.getBounds().overlaps(paddle1.getBounds())) {
             if (ball.left() < paddle1.right() && ball.right() > paddle1.right()) {
                 hitSound.setVolume(hitSound.play(), hitSoundVolume);
